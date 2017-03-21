@@ -59,13 +59,14 @@ void seperate(char *str, char *val[])
 {
 	char *token;
 	int argc = 0;
-  
+
+	str[strlen(str) -1] = '\0';
 	token = strtok(str, "=");
 	while(token != NULL) {
 		val[argc] = token;
 		token = strtok(NULL, "=");
 		argc += 1;
-	}
+	}	
 }
 
 void init(void)

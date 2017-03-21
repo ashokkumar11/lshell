@@ -4,3 +4,5 @@
 void command_seperate(void);
 void shell_prompt(void);
 int command_execute(void);
+void replace_shellvar(void);
+int check(void);
