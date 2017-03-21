@@ -7,6 +7,7 @@
 #include <envset.h>
 #include <builtin.h>
 #include <shell.h>
+#include <redir.h>
 
 static char buf[BUF_MAX];
 static char *argv[ARGV_MAX];
@@ -72,9 +73,12 @@ int check(void)
 {
 	int i;
 
-	for (i = 0; buf[i]; i++)
+	for (i = 0; buf[i]; i++) {
 		if (buf[i] == '=')
-			return SUCCESS;
+			return 0;
+		if (buf[i] == '<' || buf[i] == '>')
+			return 1;
+	}
 	return FAILURE;
 }
 
@@ -87,9 +91,12 @@ int main()
 		if (buf[0] == '\n') {
 			shell_prompt();
 		} else {
-			if (check() == SUCCESS) {
+			if (check() == 0) {
 				seperate(buf, argv);
 				set_env(argv[0], argv[1]);
+			} else if (check() == 1) {
+				command_seperate();
+				redirection(argv);
 			} else {
 				command_seperate();
 				command_execute();

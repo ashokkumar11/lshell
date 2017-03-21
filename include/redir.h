@@ -10,4 +10,4 @@ int rd_pos(char *argv[], int *flag);
 int rd_stdin(char *argv[], int sign_pos);
 int rd_stdout(char *argv[], int sign_pos);
 int rd_append(char *argv[], int sign_pos);
-void redirection(char *argv[]);
+int redirection(char *argv[]);

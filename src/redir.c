@@ -135,7 +135,7 @@ int rd_append(char *argv[], int sign_pos)
 
 }
 
-void redirection(char *argv[])
+int redirection(char *argv[])
 {
 	int flag;
 	int sign_pos;
@@ -154,4 +154,5 @@ void redirection(char *argv[])
 		rd_append(argv, sign_pos);
 		break;
 	}
+	return 0;
 }
