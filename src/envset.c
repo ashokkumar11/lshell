@@ -64,7 +64,7 @@ void seperate(char *str, char *val[])
 	str[strlen(str) -1] = '\0';
 	token = strtok(str, "=");
 	while(token != NULL) {
-		val[argc] = token;
+		val[argc] = strdup(token);
 		token = strtok(NULL, "=");
 		argc += 1;
 	}	

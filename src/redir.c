@@ -10,6 +10,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <redir.h>
+#include <builtin.h>
 
 int rd_pos(char *argv[], int *flag)
 {
@@ -45,12 +46,18 @@ int rd_stdin(char *argv[], int sign_pos)
 		cmd[loop] = argv[loop];
 	cmd[loop] = NULL;
 
+	fd = open(argv[2], O_RDONLY);
+	if (fd == -1) {
+		error(0, errno, "File cannot be opened");
+		return -1;
+	}
+	
+	if (builtin_cmds(cmd) == 0)
+		return 0;
+
 	pid = fork();
 	switch (pid) {
 	case 0:
-		fd = open(argv[2], O_RDONLY);
-		if (fd == -1)
-			error(1, errno, "File cannot be opened");
 		dup2(fd, STDIN_FILENO);
 
 		if (execvp(cmd[0], cmd) == -1)
@@ -82,10 +89,14 @@ int rd_stdout(char *argv[], int sign_pos)
 		cmd[loop] = argv[loop];
 	cmd[loop] = NULL;
 
+	fd = open(argv[sign_pos+1], O_WRONLY|O_CREAT, 0644);
+
+	if (builtin_cmds(cmd) == 0)
+		return 0;
+
 	pid = fork();
 	switch (pid) {
-	case 0:
-		fd = open(argv[sign_pos+1], O_WRONLY|O_CREAT, 0666);
+	case 0:		
 		dup2(fd, STDOUT_FILENO);
 		if (execvp(cmd[0], cmd) == -1)
 			return -1;
@@ -114,10 +125,14 @@ int rd_append(char *argv[], int sign_pos)
 		cmd[loop] = argv[loop];
 	cmd[loop] = NULL;
 
+	fd = open(argv[sign_pos+1], O_WRONLY|O_CREAT|O_APPEND, 0644);
+	
+	if (builtin_cmds(cmd) == 0)
+		return 0;
+
 	pid = fork();
 	switch (pid) {
 	case 0:
-		fd = open(argv[sign_pos+1], O_WRONLY|O_CREAT|O_APPEND, 0666);
 		dup2(fd, STDOUT_FILENO);
 		if (execvp(cmd[0], cmd) == -1)
 			return -1;

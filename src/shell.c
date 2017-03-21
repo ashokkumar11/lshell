@@ -8,6 +8,8 @@
 #include <builtin.h>
 #include <shell.h>
 #include <redir.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 static char buf[BUF_MAX];
 static char *argv[ARGV_MAX];
@@ -20,7 +22,7 @@ void command_seperate(void)
 	buf[strlen(buf) - 1] = '\0';
 	token = strtok(buf, " ");
 	while(token != NULL) {
-		argv[argc] = token;
+		argv[argc] = strdup(token);
 		token = strtok(NULL, " ");
 		argc += 1;
 	}
@@ -39,7 +41,6 @@ void shell_prompt(void)
 
 int command_execute(void)
 {
-	int i;
 	pid_t pid;
 	int status;
 
