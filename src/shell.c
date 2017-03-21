@@ -83,7 +83,7 @@ int main()
 	init();
 	shell_prompt();
 	while (1) {
-		fgets(buf, sizeof(buf), stdin);    
+		fgets(buf, sizeof(buf), stdin);
 		if (buf[0] == '\n') {
 			shell_prompt();
 		} else {
@@ -91,10 +91,10 @@ int main()
 				seperate(buf, argv);
 				set_env(argv[0], argv[1]);
 			} else {
-				command_seperate();	  
+				command_seperate();
 				command_execute();
 			}
 			shell_prompt();
-		}    
+		}
 	}
 }

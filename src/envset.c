@@ -8,6 +8,7 @@
 #include <sys/types.h>
 #include <pwd.h>
 #include <envset.h>
+#include <signal.h>
 
 int cwd(void)
 {
@@ -74,7 +75,13 @@ void init(void)
 	FILE *fp;
 	char *val[ENV_MAX];
 	char str[STR_MAX];
-  
+	
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGTTOU, SIG_IGN);
+	signal(SIGTTIN, SIG_IGN);
+	signal(SIGTSTP, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
+
 	get_uinfo();   
 	login_usr();
 	cwd();
