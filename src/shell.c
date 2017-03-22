@@ -10,6 +10,7 @@
 #include <redir.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include <pipe.h>
 
 static char buf[BUF_MAX];
 static char *argv[ARGV_MAX];
@@ -79,6 +80,8 @@ int check(void)
 			return 0;
 		if (buf[i] == '<' || buf[i] == '>')
 			return 1;
+		if (buf[i] == '|')
+			return 2;
 	}
 	return FAILURE;
 }
@@ -98,6 +101,9 @@ int main()
 			} else if (check() == 1) {
 				command_seperate();
 				redirection(argv);
+			} else if (check() == 2) {
+				command_seperate();
+				pipe_command(argc, argv);
 			} else {
 				command_seperate();
 				command_execute();
