@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <pipe.h>
+#include <colors.h>
 
 static char buf[BUF_MAX];
 static char *argv[ARGV_MAX];
@@ -35,9 +36,9 @@ void shell_prompt(void)
 {
 	argc = 0;
 	if (strcmp(getenv("USER"), "root") == 0)
-		printf("%s@%s:%s# ", getenv("USER"), getenv("USERNAME"), getenv("PWD"));
+		printf(BLD WHT"%s"RED"@"LIM"%s:"BLU"%s# " RESET, getenv("USER"), getenv("USERNAME"), getenv("PWD"));
 	else
-		printf("%s@%s:%s$ ", getenv("USER"), getenv("USERNAME"), getenv("PWD"));
+		printf(BLD WHT"%s"RED"@"LIM"%s:"BLU"%s$ " RESET, getenv("USER"), getenv("USERNAME"), getenv("PWD"));
 }
 
 int command_execute(void)
